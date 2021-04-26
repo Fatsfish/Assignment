@@ -12,14 +12,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import daos.UserDAO;
+import dtos.UserDTO;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author User-PC
  */
 public class DeleteController extends HttpServlet {
-    private static final String ERROR="error.jsp";
-    private static final String SUCCESS="SearchController";
+
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "SearchController";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,19 +36,35 @@ public class DeleteController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       String url=ERROR;
-       try{
-           String userID= request.getParameter("userID");
-           UserDAO dao= new UserDAO();
-           boolean check=dao.deleteUser(userID);
-           if(check){
-               url=SUCCESS;
-           }
-       }catch(Exception e){
-           
-       }finally{
-           request.getRequestDispatcher(url).forward(request, response);
-       }
+        String url = ERROR;
+        HttpSession session = request.getSession();
+        String LogID = "";
+        if (session.getAttribute("LOGIN_USER") != null) {
+            LogID = ((UserDTO) session.getAttribute("LOGIN_USER")).getUserID();
+        }
+        try {
+            String userID = request.getParameter("userID");
+            String roleID = request.getParameter("roleID");
+            if (!LogID.equals(userID)) {
+                UserDAO dao = new UserDAO();
+                if (!roleID.contains("AD")) {
+                    boolean check = dao.deleteUser(userID);
+                    if (check) {
+                        url = SUCCESS;
+                    }
+                } else {
+                    request.setAttribute("DELETE_ERROR", "Cannot delete admin!");
+                    url = SUCCESS;
+                }
+            } else {
+                request.setAttribute("DELETE_ERROR", "User is logging in!");
+                url = SUCCESS;
+            }
+        } catch (Exception e) {
+
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

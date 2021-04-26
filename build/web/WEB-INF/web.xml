@@ -16,6 +16,18 @@
         <servlet-name>DeleteController</servlet-name>
         <servlet-class>controller.DeleteController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddController</servlet-name>
+        <servlet-class>controller.AddController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveController</servlet-name>
+        <servlet-class>controller.RemoveController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditController</servlet-name>
+        <servlet-class>controller.EditController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -34,6 +46,18 @@
     <servlet-mapping>
         <servlet-name>DeleteController</servlet-name>
         <url-pattern>/DeleteController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddController</servlet-name>
+        <url-pattern>/AddController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveController</servlet-name>
+        <url-pattern>/RemoveController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditController</servlet-name>
+        <url-pattern>/EditController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

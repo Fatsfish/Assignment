@@ -13,6 +13,7 @@ public class LoginController extends HttpServlet {
 
     private static final String SUCCESS = "search.jsp";
     private static final String ERROR = "login.jsp";
+    private static final String SHOPPING = "shopping.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,8 +36,11 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             if (user != null) {
                 session.setAttribute("LOGIN_USER", user);
-                if (user.getRole().contains("AD")) {
+                if (user.getRole().contains("AD")||user.getRole().contains("M")) {
                     url = SUCCESS;
+                }
+                else {
+                    url = SHOPPING;
                 }
             }
 

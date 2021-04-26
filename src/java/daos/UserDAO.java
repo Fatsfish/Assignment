@@ -55,21 +55,24 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "Select userID, fullName, roleID "
+                String sql = "Select userID, fullName, roleID , phone, email, address "
                         + "from tblUser "
                         + "WHERE fullName like ?";
                 stm = conn.prepareStatement(sql);
                 stm.setString(1, "%" + search + "%");
                 rs = stm.executeQuery();
                 while (rs.next()) {
-                    String userID = rs.getString("UserID");
+                    String userID = rs.getString("userID");
                     String fullName = rs.getString("fullName");
                     String roleID = rs.getString("roleID");
+                    int phone = rs.getInt("phone");
+                    String email = rs.getString("email");
+                    String address = rs.getString("address");
                     String password = "***";
                     if (listUser == null) {
                         listUser = new ArrayList<>();
                     }
-                    listUser.add(new UserDTO(userID, fullName, roleID, password));
+                    listUser.add(new UserDTO(userID, fullName, roleID, password, String.format("%d", phone), email, address));
 
                 }
             }
@@ -217,13 +220,16 @@ public class UserDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "INSERT INTO tblUser(userID, fullName, roleID, password) "
-                        + " VALUES(?,?,?,?)";
+                String sql = "INSERT INTO tblUser(userID, fullName, roleID, password, phone, email, address) "
+                        + " VALUES(?,?,?,?,?,?,?)";
                 stm = conn.prepareStatement(sql);
                 stm.setString(1, user.getUserID());
                 stm.setString(2, user.getFullname());
                 stm.setString(3, user.getRole());
                 stm.setString(4, user.getPassword());
+                stm.setInt(5, Integer.parseInt(user.getPhone()));
+                stm.setString(6, user.getEmail());
+                stm.setString(7, user.getAddress());
                 stm.executeUpdate();
             }
         } finally {

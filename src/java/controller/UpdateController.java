@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import daos.UserDAO;
 import dtos.UserDTO;
+import dtos.UserError;
 
 /**
  *
@@ -21,8 +22,9 @@ import dtos.UserDTO;
  */
 @WebServlet(name = "UpdateController", urlPatterns = {"/UpdateController"})
 public class UpdateController extends HttpServlet {
-    private static final String SUCCESS="SearchController";
-    private static final String ERROR="updateUser.jsp";
+
+    private static final String SUCCESS = "SearchController";
+    private static final String ERROR = "updateUser.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,23 +38,37 @@ public class UpdateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url=ERROR;
-        try{
-            String userID=request.getParameter("userID");
-            String fullName=request.getParameter("fullName");
-            String roleID=request.getParameter("roleID");
-            UserDAO dao= new UserDAO();
-            UserDTO user=new UserDTO(userID,fullName,roleID,"");
-            boolean check= dao.update(user);
-            if(check){
-                url=SUCCESS;
+        String url = ERROR;
+        UserError userError = new UserError("", "", "", "", "", "", "", "");
+        try {
+            String userID = request.getParameter("userID");
+            String fullName = request.getParameter("fullName");
+            String roleID = request.getParameter("roleID");
+            UserDAO dao = new UserDAO();
+            UserDTO user = new UserDTO(userID, fullName, roleID, "");
+            boolean flag = true;
+            if (fullName.length() > 250 || fullName.length() < 1) {
+                flag = false;
+                userError.setFullNameError("Full Name must be [1-250]");
             }
-        }catch(Exception e){
-            
-        }finally{
+            if (roleID.length() > 2 || roleID.length() < 1 || (!roleID.equals("G") && !roleID.equals("M") && !roleID.equals("AD"))) {
+                flag = false;
+                userError.setRoleIDError("RoleID must be [1-2] and must be G - guest, M - member or AD - admin");
+            }
+            if (flag) {
+                boolean check = dao.update(user);
+                if (check) {
+                    url = SUCCESS;
+                }
+            } else {
+                request.setAttribute("ERROR", userError);
+            }
+        } catch (Exception e) {
+
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-       
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

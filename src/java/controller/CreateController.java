@@ -41,11 +41,14 @@ public class CreateController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        UserError userError = new UserError("", "", "", "", "");
+        UserError userError = new UserError("", "", "", "", "", "", "", "");
         try {
             String userID = request.getParameter("userID");
-            String roleID = request.getParameter("roleID");
+            String roleID = "G";
             String fullName = request.getParameter("fullName");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
             String password = request.getParameter("password");
             String confirm = request.getParameter("confirm");
             boolean flag = true;
@@ -53,31 +56,21 @@ public class CreateController extends HttpServlet {
                 flag = false;
                 userError.setUserIDError("UserID must be [1-5]");
             }
-            if (fullName.length() > 10 || fullName.length() < 1) {
+            if (fullName.length() > 250 || fullName.length() < 1) {
                 flag = false;
-                userError.setFullNameError("Full Name must be [1-10]");
+                userError.setFullNameError("Full Name must be [1-250]");
             }
-            if (roleID.length() > 5 || roleID.length() < 1) {
+            if (roleID.length() > 2 || roleID.length() < 1 || (!roleID.equals("G") && !roleID.equals("M"))) {
                 flag = false;
-                userError.setRoleIDError("RoleID must be [1-5]");
+                userError.setRoleIDError("RoleID must be [1-2] and must be G - guest or M - member");
             }
             if (!password.equals(confirm)) {
                 flag = false;
-                userError.setConfirmError("2 password khong giong nhau!");
+                userError.setConfirmError("2 passwords are not matched!");
             }
             if (flag) {
-                /*UserDAO dao = new UserDAO();
-                boolean check = dao.checkDuplicate(userID);
-                if (check) {
-                    userError.setUserIDError("UserID duplicate");
-                    request.setAttribute("ERROR", userError);
-                } else {
-                    UserDTO user = new UserDTO(userID, fullName, roleID, password);
-                    dao.insert(user);
-                    url=SUCCESS;
-                }*/
                 UserDAO dao = new UserDAO();
-                UserDTO user = new UserDTO(userID, fullName, roleID, password);
+                UserDTO user = new UserDTO(userID, fullName, roleID, password, phone, email, address);
                 dao.insertNew(user);
                 url = SUCCESS;
             } else {

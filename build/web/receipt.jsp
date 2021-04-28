@@ -36,7 +36,7 @@
                     <td>${payer.firstName} ${payer.lastName}</td>		
                 </tr>
                 <tr>
-                    <td><b>Description:</b></td>
+                    <td><b>Description: Your billing ID</b></td>
                     <td>${transaction.description}</td>
                 </tr>	
                 <tr>

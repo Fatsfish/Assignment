@@ -241,4 +241,29 @@ public class UserDAO {
             }
         }
     }
+
+    public void insertNew1(UserDTO user) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "INSERT INTO tblUser(userID, fullName, roleID, password) "
+                        + " VALUES(?,?,?,?)";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, user.getUserID());
+                stm.setString(2, user.getFullname());
+                stm.setString(3, user.getRole());
+                stm.setString(4, user.getPassword());
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
 }

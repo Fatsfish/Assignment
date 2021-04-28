@@ -25,7 +25,6 @@ public class PayPalExecutePayment extends HttpServlet {
         try {
             PayPalDAO paymentServices = new PayPalDAO();
             Payment payment = paymentServices.executePayment(paymentId, payerId);
-
             PayerInfo payerInfo = payment.getPayer().getPayerInfo();
             Transaction transaction = payment.getTransactions().get(0);
 
@@ -33,7 +32,8 @@ public class PayPalExecutePayment extends HttpServlet {
             request.setAttribute("transaction", transaction);
 
             request.getRequestDispatcher("receipt.jsp").forward(request, response);
-
+            HttpSession session=request.getSession();
+            session.setAttribute("CART", null);
         } catch (PayPalRESTException ex) {
             request.setAttribute("errorMessage", ex.getMessage());
             ex.printStackTrace();

@@ -112,19 +112,19 @@
                                             <td><input type="text" name="product" value="Final billing" readonly="true"/></td>
                                             <tr>
                                                 <td>Sub Total:</td>
-                                                <td><input type="text" name="subtotal" value="${total}" /></td>
+                                                <td><input type="text" name="subtotal" value="${total}" readonly="" /></td>
                                             </tr>
                                             <tr>
                                                 <td>Shipping:</td>
-                                                <td><input type="text" name="shipping" value="${total/10}" /></td>
+                                                <td><input type="text" name="shipping" value="${total/10}" readonly="" /></td>
                                             </tr>		
                                             <tr>
                                                 <td>Tax:</td>
-                                                <td><input type="text" name="tax" value="${total/10}" /></td>
+                                                <td><input type="text" name="tax" value="${total/10}" readonly=""/></td>
                                             </tr>		
                                             <tr>
                                                 <td>Total Amount:</td>
-                                                <td><input type="text" name="total" value="${total+total/5}" /></td>
+                                                <td><input type="text" name="total" value="${total+total/5}" readonly="" /></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" align="center">
